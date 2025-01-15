@@ -6,17 +6,21 @@ import java.util.stream.Stream;
 
 public abstract class EventSourcedAggregate {
 
-    private final List<GameEvent> freshEvents = new ArrayList<>();
+  private final List<GameEvent> freshEvents = new ArrayList<>();
 
-    protected void enqueue(GameEvent event) {
-        freshEvents.add(event);
-        apply(event);
-    }
+  protected void enqueue(GameEvent event) {
+    freshEvents.add(event);
+    apply(event);
+  }
 
-    protected abstract void apply(GameEvent event);
+  public void reconstruct(List<GameEvent> events) {
+    events.forEach(this::enqueue);
+  }
 
-    public Stream<GameEvent> freshEvents() {
-        return freshEvents.stream();
-    }
+  protected abstract void apply(GameEvent event);
+
+  public Stream<GameEvent> freshEvents() {
+    return freshEvents.stream();
+  }
 
 }
