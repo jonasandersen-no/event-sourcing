@@ -14,7 +14,9 @@ public abstract class EventSourcedAggregate {
   }
 
   public void reconstruct(List<GameEvent> events) {
-    events.forEach(this::enqueue);
+    for (GameEvent event : events) {
+      enqueue(event);
+    }
   }
 
   protected abstract void apply(GameEvent event);

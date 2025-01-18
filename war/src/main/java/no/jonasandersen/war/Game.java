@@ -18,6 +18,10 @@ public class Game extends EventSourcedAggregate {
     return deck;
   }
 
+  void addPlayer(String playerName) {
+    enqueue(new PlayerJoinedEvent(id, playerName));
+  }
+
   @Override
   protected void apply(GameEvent event) {
     switch (event) {
