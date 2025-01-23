@@ -1,4 +1,4 @@
-package no.jonasandersen.war;
+package no.jonasandersen.war.domain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,14 @@ public class Game extends EventSourcedAggregate {
   }
 
   void addPlayer(String playerName) {
+    if (players.size() >= 2) {
+      throw new GameIsFullException();
+    }
     enqueue(new PlayerJoinedEvent(id, playerName));
+  }
+
+  public List<Player> getPlayers() {
+    return List.copyOf(players);
   }
 
   @Override
@@ -37,9 +44,5 @@ public class Game extends EventSourcedAggregate {
         }
       }
     }
-  }
-
-  public List<Player> players() {
-    return List.copyOf(players);
   }
 }

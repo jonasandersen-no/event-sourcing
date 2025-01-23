@@ -1,4 +1,4 @@
-package no.jonasandersen.war;
+package no.jonasandersen.war.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

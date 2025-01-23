@@ -1,4 +1,4 @@
-package no.jonasandersen.war;
+package no.jonasandersen.war.domain;
 
 import java.util.ArrayList;
 import java.util.List;

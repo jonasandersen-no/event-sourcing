@@ -1,6 +1,7 @@
-package no.jonasandersen.war;
+package no.jonasandersen.war.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,7 @@ class GameTest {
     game.apply(new GameStartedEvent(id));
     game.apply(new PlayerJoinedEvent(id, "Player 1"));
 
-    assertThat(game.players())
+    assertThat(game.getPlayers())
         .isNotNull()
         .hasSize(1)
         .contains(new Player("Player 1"));
@@ -59,7 +60,7 @@ class GameTest {
     game.apply(new PlayerJoinedEvent(id, "Player 1"));
     game.apply(new PlayerJoinedEvent(id, "Player 2"));
 
-    assertThat(game.players())
+    assertThat(game.getPlayers())
         .isNotNull()
         .hasSize(2)
         .containsExactly(new Player("Player 1"), new Player("Player 2"));
@@ -77,11 +78,11 @@ class GameTest {
 
     game.reconstruct(events);
 
-    game.apply(new PlayerJoinedEvent(id, "Player 2"));
+    assertThatThrownBy(() -> game.addPlayer("Player 3"))
+        .isInstanceOf(GameIsFullException.class)
+        .hasMessage("The game is full");
 
-    game.addPlayer("Player 3");
-
-    assertThat(game.players())
+    assertThat(game.getPlayers())
         .isNotNull()
         .hasSize(2)
         .containsExactly(new Player("Player 1"), new Player("Player 2"));
