@@ -1,4 +1,4 @@
-package no.jonasandersen;
+package no.jonasandersen.event;
 
 public class Main {
 

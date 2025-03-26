@@ -1,4 +1,4 @@
-package no.jonasandersen.war.domain;
+package no.jonasandersen.event.war.domain;
 
 public class GameIsFullException extends RuntimeException {
 
