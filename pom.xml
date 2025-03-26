@@ -26,12 +26,64 @@
     <module>common</module>
   </modules>
   <scm>
-    <connection/>
-    <developerConnection/>
-    <tag/>
-    <url/>
+    <connection>scm:git:git@github.com:jonasandersen-no/event-sourcing.git</connection>
+    <developerConnection>scm:git:git@github.com:jonasandersen-no/event-sourcing.git</developerConnection>
+    <tag></tag>
+    <url></url>
   </scm>
   <properties>
     <java.version>24</java.version>
   </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.1.1</version>
+        <configuration>
+          <pushChanges>false</pushChanges>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>reposilite-releases</id>
+      <name>Reposilite Releases</name>
+      <url>https://maven.jonasandersen.no/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>reposilite-snapshots</id>
+      <name>Reposilite Snapshots</name>
+      <url>https://maven.jonasandersen.no/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  <distributionManagement>
+    <repository>
+      <id>reposilite-releases</id>
+      <name>Reposilite Releases</name>
+      <url>https://maven.jonasandersen.no/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>reposilite-snapshots</id>
+      <name>Reposilite Snapshots</name>
+      <url>https://maven.jonasandersen.no/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>

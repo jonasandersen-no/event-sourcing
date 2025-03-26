@@ -1,0 +1,46 @@
+name: Run test and deploy
+
+on:
+  merge_group:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-24.04 ]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.18.0
+        with:
+          java-version: 24
+          java-distribution: liberica
+          checkout-persist-credentials: true
+          cache-enabled: false
+          settings-servers: |
+            [{
+                "id": "reposilite-releases",
+                "username": "${{ secrets.REPOSILITE_USERNAME }}",
+                "password": "${{ secrets.REPOSILITE_PASSWORD }}"
+            },
+            {
+                "id": "reposilite-snapshots",
+                "username": "${{ secrets.REPOSILITE_USERNAME }}",
+                "password": "${{ secrets.REPOSILITE_PASSWORD }}"
+            }]
+
+      - name: Run tests
+        run: mvn clean test
+      - name: Deploy
+        run: mvn deploy
