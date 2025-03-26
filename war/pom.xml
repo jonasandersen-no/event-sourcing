@@ -11,6 +11,10 @@
 
   <artifactId>war</artifactId>
 
+  <properties>
+    <java.version>24</java.version>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -21,6 +25,10 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>no.jonasandersen.event</groupId>
+      <artifactId>common</artifactId>
     </dependency>
   </dependencies>
 

@@ -3,8 +3,9 @@ package no.jonasandersen.event.war.domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import no.jonasandersen.event.common.EventSourcedAggregate;
 
-public class Game extends EventSourcedAggregate {
+public class Game extends EventSourcedAggregate<GameEvent> {
 
   private UUID id;
   private Deck deck;
@@ -67,7 +68,7 @@ public class Game extends EventSourcedAggregate {
 
   public Player getPlayer(String playerName) {
     for (Player player : players) {
-      if (player.getName().equals(playerName)){
+      if (player.getName().equals(playerName)) {
         return player;
       }
     }
