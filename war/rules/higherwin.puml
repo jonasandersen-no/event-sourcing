@@ -1,0 +1,30 @@
+@startuml
+title "Rule: Comparing Played Cards - Higher Rank Wins"
+
+object "Player 1 Played Card" as Card1 {
+  note: Rank and Suit
+}
+
+object "Player 2 Played Card" as Card2 {
+  note: Rank and Suit
+}
+
+object "Compare Ranks" as Compare {
+  note: Determine which card has\nthe higher rank.
+}
+
+Card1 -- Compare
+Card2 -- Compare
+
+object "Player 1 Wins Round" as Win1 {
+  note: If Card 1 has a higher rank,\nPlayer 1 wins the round.
+}
+
+object "Player 2 Wins Round" as Win2 {
+  note: If Card 2 has a higher rank,\nPlayer 2 wins the round.
+}
+
+Compare -- Win1 : Card1 > Card2
+Compare -- Win2 : Card2 > Card1
+
+@enduml

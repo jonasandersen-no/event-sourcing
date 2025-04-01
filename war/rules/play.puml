@@ -1,0 +1,25 @@
+@startuml
+title "Rule: Players Play a Card"
+
+object "Player 1 Hand" as Player1Hand
+object "Player 2 Hand" as Player2Hand
+
+object "Player 1 Plays Top Card" as Play1 {
+  note: Player 1 takes the\ntop card from their hand.
+}
+
+object "Player 2 Plays Top Card" as Play2 {
+  note: Player 2 takes the\ntop card from their hand.
+}
+
+Player1Hand -- Play1
+Player2Hand -- Play2
+
+object "Cards Face Up" as FaceUp {
+  note: Both played cards are\nrevealed simultaneously.
+}
+
+Play1 -- FaceUp
+Play2 -- FaceUp
+
+@enduml

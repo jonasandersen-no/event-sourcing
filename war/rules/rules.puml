@@ -1,0 +1,24 @@
+@startuml
+title "Rule: Dealing Cards to Players"
+
+object "Shuffled Deck" as ShuffledDeck
+
+object "Player 1" as Player1
+object "Player 2" as Player2
+
+object "Deal One Card" as DealCard {
+  note: Take the top card\nfrom the shuffled deck.
+}
+
+ShuffledDeck -- DealCard
+DealCard -- Player1 : Alternating
+
+DealCard -- Player2 : Alternating
+
+object "Each Player Gets 26 Cards" as DistributeAll {
+  note: Repeat the 'Deal One Card'\nprocess until the deck is empty\n(each player receives 26 cards).
+}
+
+DealCard -- DistributeAll
+
+@enduml

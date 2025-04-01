@@ -1,0 +1,13 @@
+@startuml
+title "Rule: Initial Deck Creation and Shuffling"
+
+object "Create 52 Cards" as CreateCards {
+  note: Creates a standard deck\nof 52 unique cards\n(13 ranks x 4 suits)
+}
+
+object "Shuffle Deck" as Shuffle {
+  note: Randomly orders the\n52 cards in the deck.
+}
+
+CreateCards -- Shuffle
+@enduml

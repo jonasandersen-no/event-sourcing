@@ -1,0 +1,127 @@
+@startuml
+package "War Game" {
+  class Game <<Aggregate>> {
+    - players: List<Player>
+    - deck: List<Card>
+    - playerDecks: Map<Player, List<Card>>
+    - playerWonCards: Map<Player, List<Card>>
+    - currentRoundCards: Map<Player, Card>
+    - status: GameStatus
+  }
+
+  enum GameStatus {
+    NOT_STARTED
+    IN_PROGRESS
+    ENDED
+  }
+
+  class GameStarted {
+    + players: List<Player>
+    + timestamp: Instant
+  }
+
+  class DeckShuffled {
+    + timestamp: Instant
+  }
+
+  class PlayerDealtCard {
+    + player: Player
+    + card: Card
+    + timestamp: Instant
+  }
+
+  class RoundStarted {
+    + roundNumber: int
+    + timestamp: Instant
+  }
+
+  class CardsPlayed {
+    + playedCards: Map<Player, Card>
+    + timestamp: Instant
+  }
+
+  class RoundWon {
+    + winner: Player
+    + wonCards: List<Card>
+    + timestamp: Instant
+  }
+
+  class GameEnded {
+    + winner: Player
+    + timestamp: Instant
+  }
+
+  class StartGameCommand {
+    + players: List<Player>
+  }
+
+  class ShuffleDeckCommand {
+  }
+
+  class PlayCardCommand {
+    + player: Player
+    + card: Card
+  }
+
+  Game --|> GameStarted : triggers
+  Game --|> DeckShuffled : triggers
+  Game --|> PlayerDealtCard : triggers
+  Game --|> RoundStarted : triggers
+  Game --|> CardsPlayed : triggers
+  Game --|> RoundWon : triggers
+  Game --|> GameEnded : triggers
+
+  StartGameCommand --|> Game : targets
+  ShuffleDeckCommand --|> Game : targets
+  PlayCardCommand --|> Game : targets
+}
+
+package Domain {
+  class Player {
+    + id: UUID
+    + name: String
+  }
+
+  class Card {
+    + suit: Suit
+    + rank: Rank
+  }
+
+  enum Suit {
+    HEARTS
+    DIAMONDS
+    CLUBS
+    SPADES
+  }
+
+  enum Rank {
+    TWO
+    THREE
+    FOUR
+    FIVE
+    SIX
+    SEVEN
+    EIGHT
+    NINE
+    TEN
+    JACK
+    QUEEN
+    KING
+    ACE
+  }
+
+  Player --|> GameStarted : involved in
+  Player --|> PlayerDealtCard : involved in
+  Player --|> CardsPlayed : involved in
+  Player --|> RoundWon : involved in
+  Player --|> GameEnded : involved in
+  Player --|> StartGameCommand : involved in
+  Player --|> PlayCardCommand : involved in
+  Card --|> PlayerDealtCard : is
+  Card --|> CardsPlayed : is
+  Card --|> RoundWon : are
+}
+
+Domain --|> "War Game" : uses
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+title "Rule: Winning a Round and Collecting Cards"
+
+object "Round Winner" as Winner
+object "Player 1 Played Card" as P1Card
+object "Player 2 Played Card" as P2Card
+
+object "Winner Collects Cards" as Collect {
+  note: The winner of the round\ntakes both played cards.
+}
+
+Winner -- Collect
+P1Card -- Collect
+P2Card -- Collect
+
+object "Cards Added to Winner's Won Pile" as AddToWon {
+  note: The collected cards are added\nto the bottom of the winner's\n'won cards' pile.
+}
+
+Collect -- AddToWon
+
+@enduml

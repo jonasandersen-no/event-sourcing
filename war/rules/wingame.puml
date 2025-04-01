@@ -1,0 +1,23 @@
+@startuml
+title "Rule: Winning the Game"
+
+object "Player 1 Won Cards Pile" as Won1
+object "Player 2 Won Cards Pile" as Won2
+object "Player 1 Hand (Empty)" as Hand1Empty
+object "Player 2 Hand (Empty)" as Hand2Empty
+
+Won1 -- Hand1Empty : If Player 2's hand is empty
+Won2 -- Hand2Empty : If Player 1's hand is empty
+
+object "Player 1 Wins Game" as GameWin1 {
+  note: If Player 2 has no cards\nleft in their hand, Player 1 wins.
+}
+
+object "Player 2 Wins Game" as GameWin2 {
+  note: If Player 1 has no cards\nleft in their hand, Player 2 wins.
+}
+
+Hand1Empty -- GameWin1
+Hand2Empty -- GameWin2
+
+@enduml

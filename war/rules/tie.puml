@@ -1,0 +1,60 @@
+@startuml
+title "Rule: Handling a Tie ('War')"
+
+object "Player 1 Played Card (Rank X)" as Played1
+object "Player 2 Played Card (Rank X)" as Played2
+
+object "Ranks Are Equal" as TieDetected {
+  note: The ranks of the played\ncards are the same.
+}
+
+Played1 -- TieDetected
+Played2 -- TieDetected
+
+object "Each Player Plays 3 Face Down Cards" as FaceDownCards1 {
+  note: Player 1 plays the next\nthree cards from their hand\nface down.
+}
+
+object "Each Player Plays 3 Face Down Cards 2" as FaceDownCards2 {
+  note: Player 2 plays the next\nthree cards from their hand\nface down.
+}
+
+TieDetected -- FaceDownCards1
+TieDetected -- FaceDownCards2
+
+object "Each Player Plays 1 Face Up Card" as FaceUpTieBreaker1 {
+  note: Player 1 plays one more card\nface up (the 'battle' card).
+}
+
+object "Each Player Plays 1 Face Up Card 2" as FaceUpTieBreaker2 {
+  note: Player 2 plays one more card\nface up (the 'battle' card).
+}
+
+FaceDownCards1 -- FaceUpTieBreaker1
+FaceDownCards2 -- FaceUpTieBreaker2
+
+object "Compare Tie-Breaker Cards" as CompareTieBreaker {
+  note: Compare the ranks of the\nface-up tie-breaker cards.
+}
+
+FaceUpTieBreaker1 -- CompareTieBreaker
+FaceUpTieBreaker2 -- CompareTieBreaker
+
+object "Player 1 Wins War" as WinWar1 {
+  note: If Player 1's tie-breaker\ncard is higher, they win all\nsix face-down cards and the\ntwo face-up cards.
+}
+
+object "Player 2 Wins War" as WinWar2 {
+  note: If Player 2's tie-breaker\ncard is higher, they win all\nsix face-down cards and the\ntwo face-up cards.
+}
+
+CompareTieBreaker -- WinWar1 : TieBreaker1 > TieBreaker2
+CompareTieBreaker -- WinWar2 : TieBreaker2 > TieBreaker1
+
+object "Another Tie?" as AnotherTie {
+  note: If the tie-breaker cards\nare also of the same rank,\nthe process repeats.
+}
+
+CompareTieBreaker -- AnotherTie : TieBreaker1 == TieBreaker2
+
+@enduml
