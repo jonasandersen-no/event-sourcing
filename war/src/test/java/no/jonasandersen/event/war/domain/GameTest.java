@@ -68,7 +68,6 @@ class GameTest {
 
   @Test
   void maxTwoPlayersCanJoinEmptyGame() {
-    Game game = new Game();
 
     UUID id = UUID.randomUUID();
     List<GameEvent> events = List.of(
@@ -76,7 +75,7 @@ class GameTest {
         new PlayerJoinedEvent(id, "Player 1"),
         new PlayerJoinedEvent(id, "Player 2"));
 
-    game.reconstruct(events);
+    Game game = Game.reconstruct(events);
 
     assertThatThrownBy(() -> game.addPlayer("Player 3"))
         .isInstanceOf(GameIsFullException.class)
@@ -129,12 +128,10 @@ class GameTest {
   }
 
   private static Game createGameWithDeck() {
-    Game game = Game.empty();
     UUID gameId = UUID.randomUUID();
-    game.reconstruct(List.of(
+    return Game.reconstruct(List.of(
         new GameCreatedEvent(gameId),
         new DeckCreatedEvent(Deck.generateRandomDeck().cards())
     ));
-    return game;
   }
 }

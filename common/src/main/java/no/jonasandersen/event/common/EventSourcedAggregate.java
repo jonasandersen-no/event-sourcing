@@ -13,12 +13,6 @@ public abstract class EventSourcedAggregate<EVENT> {
     apply(event);
   }
 
-  public void reconstruct(List<EVENT> events) {
-    for (EVENT event : events) {
-      enqueue(event);
-    }
-  }
-
   protected abstract void apply(EVENT event);
 
   public Stream<EVENT> freshEvents() {

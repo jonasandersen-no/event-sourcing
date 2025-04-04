@@ -17,8 +17,12 @@ public class Game extends EventSourcedAggregate<GameEvent> {
     return game;
   }
 
-  public static Game empty() {
-    return new Game();
+  public static Game reconstruct(List<GameEvent> events) {
+    Game game = new Game();
+    for (GameEvent event : events) {
+      game.enqueue(event);
+    }
+    return game;
   }
 
   public UUID id() {
