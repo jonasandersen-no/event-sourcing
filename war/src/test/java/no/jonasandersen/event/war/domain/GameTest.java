@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
 import java.util.UUID;
+import no.jonasandersen.event.war.port.InOrderDeckGenerator;
 import org.junit.jupiter.api.Test;
 
 class GameTest {
@@ -12,9 +13,7 @@ class GameTest {
   @Test
   void gameContainsDeck() {
     UUID id = UUID.randomUUID();
-    Game game = new Game();
-
-    game.apply(new GameCreatedEvent(id));
+    Game game = Game.create(id);
 
     assertThat(game.id())
         .isNotNull();
@@ -22,10 +21,9 @@ class GameTest {
 
   @Test
   void deckContainsOneCard() {
-    Game game = new Game();
+    Game game = Game.create(UUID.randomUUID());
 
-    game.apply(new GameCreatedEvent(UUID.randomUUID()));
-    game.apply(new DeckCreatedEvent(List.of(new Card(Rank.ACE, Suit.CLUBS))));
+    game.createDeck(List.of(new Card(Rank.ACE, Suit.CLUBS)));
 
     Deck deck = game.deck();
 
@@ -39,43 +37,43 @@ class GameTest {
 
   @Test
   void playerCanJoinEmptyGame() {
-    Game game = new Game();
-
     UUID id = UUID.randomUUID();
-    game.apply(new GameCreatedEvent(id));
-    game.apply(new PlayerJoinedEvent(id, "Player 1"));
+    Game game = Game.create(id);
 
-    assertThat(game.getPlayers())
-        .isNotNull()
-        .hasSize(1)
-        .contains(new Player("Player 1"));
+    assertThat(game.canJoin()).isTrue();
+
+    game.join("Player 1");
+
+    assertThat(game.hasJoined("Player 1"))
+        .isTrue();
   }
 
   @Test
   void multiplePlayersCanJoinEmptyGame() {
-    Game game = new Game();
-
     UUID id = UUID.randomUUID();
-    game.apply(new GameCreatedEvent(id));
-    game.apply(new PlayerJoinedEvent(id, "Player 1"));
-    game.apply(new PlayerJoinedEvent(id, "Player 2"));
+    Game game = Game.reconstruct(List.of(
+        new GameCreatedEvent(id),
+        new PlayerJoinedEvent(id, "Player 1")
+    ));
 
-    assertThat(game.getPlayers())
-        .isNotNull()
-        .hasSize(2)
-        .containsExactly(new Player("Player 1"), new Player("Player 2"));
+    assertThat(game.canJoin()).isTrue();
+
+    game.join("Player 2");
+
+    assertThat(game.hasJoined("Player 2")).isTrue();
+
   }
 
   @Test
   void maxTwoPlayersCanJoinEmptyGame() {
 
     UUID id = UUID.randomUUID();
-    List<GameEvent> events = List.of(
+    Game game = Game.reconstruct(List.of(
         new GameCreatedEvent(id),
         new PlayerJoinedEvent(id, "Player 1"),
-        new PlayerJoinedEvent(id, "Player 2"));
+        new PlayerJoinedEvent(id, "Player 2")));
 
-    Game game = Game.reconstruct(events);
+    assertThat(game.canJoin()).isFalse();
 
     assertThatThrownBy(() -> game.addPlayer("Player 3"))
         .isInstanceOf(GameIsFullException.class)
@@ -131,7 +129,7 @@ class GameTest {
     UUID gameId = UUID.randomUUID();
     return Game.reconstruct(List.of(
         new GameCreatedEvent(gameId),
-        new DeckCreatedEvent(Deck.generateRandomDeck().cards())
+        new DeckCreatedEvent(new InOrderDeckGenerator().generateDeck().cards())
     ));
   }
 }

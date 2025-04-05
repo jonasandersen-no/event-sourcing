@@ -1,6 +1,6 @@
 package no.jonasandersen.event.war.domain;
 
-enum Suit {
+public enum Suit {
   CLUBS,
   DIAMONDS,
   HEARTS,

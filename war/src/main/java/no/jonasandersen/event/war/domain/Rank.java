@@ -1,6 +1,6 @@
 package no.jonasandersen.event.war.domain;
 
-enum Rank {
+public enum Rank {
   ACE,
   TWO,
   THREE,

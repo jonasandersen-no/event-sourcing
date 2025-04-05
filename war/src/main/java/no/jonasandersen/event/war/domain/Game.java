@@ -11,10 +11,15 @@ public class Game extends EventSourcedAggregate<GameEvent> {
   private Deck deck;
   private List<Player> players = new ArrayList<>(2);
 
+  private Game() {
+  }
+
+  private Game(UUID id) {
+    enqueue(new GameCreatedEvent(id));
+  }
+
   public static Game create(UUID gameId) {
-    Game game = new Game();
-    game.enqueue(new GameCreatedEvent(gameId));
-    return game;
+    return new Game(gameId);
   }
 
   public static Game reconstruct(List<GameEvent> events) {
@@ -77,5 +82,21 @@ public class Game extends EventSourcedAggregate<GameEvent> {
       }
     }
     throw new PlayerNotFoundException(playerName);
+  }
+
+  public void join(String playerName) {
+    enqueue(new PlayerJoinedEvent(this.id, playerName));
+  }
+
+  public boolean hasJoined(String playerName) {
+    return getPlayer(playerName) != null;
+  }
+
+  public boolean canJoin() {
+    return getPlayers().size() < 2;
+  }
+
+  public void createDeck(List<Card> cards) {
+    enqueue(new DeckCreatedEvent(cards));
   }
 }
